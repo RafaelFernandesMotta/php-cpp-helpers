@@ -124,17 +124,29 @@ OBJECTS             =   $(SOURCES:%.cpp=%.o)
 #   From here the build instructions start
 #
 
-all:                    ${OBJECTS} ${EXTENSION}
+all:					${OBJECTS} ${EXTENSION}
 
-${EXTENSION}:           ${OBJECTS}
-                        ${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${LINKER_DEPENDENCIES}
+${EXTENSION}:			${OBJECTS}
+						${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${LINKER_DEPENDENCIES}
 
 ${OBJECTS}:
-                        ${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+						${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
 
-install:        
-                        ${CP} ${EXTENSION} ${EXTENSION_DIR}
-                        ${CP} ${INI} ${INI_DIR}
+install:
+						${CP} ${EXTENSION} ${EXTENSION_DIR}
+						${CP} ${INI} ${INI_DIR}
+						${PHPENMOD} ${NAME}
 
+remove:
+						${PHPDISMOD} ${NAME}
+						${RM} ${EXTENSION_DIR}/${EXTENSION}
+						${RM} ${INI_DIR}/${INI}
+				
 clean:
-                        ${RM} ${EXTENSION} ${OBJECTS}
+						${RM} ${EXTENSION} ${OBJECTS}
+
+tudo:
+						make remove
+						make clean
+						make
+						make install
